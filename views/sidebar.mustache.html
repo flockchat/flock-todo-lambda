@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Todos</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <style>
+      body {
+        font-family: Helvetica, Arial, sans-serif;
+      }
+    </style>
+
+    <script type="text/javascript">
+      function todoRequestWithData(data, error) {
+        $.ajax({
+          type: "POST",
+          url: "/prod/todo",
+          data: JSON.stringify(data),
+          success: function() {
+            location.reload();
+          },
+          error: error,
+          dataType: "json",
+          contentType: 'application/json; charset=UTF-8',
+        });
+      }
+
+      function createTodo() {
+        var data = {
+          type: "create",
+          userId: "{{flockEvent.userId}}",
+          userName: "{{flockEvent.userName}}",
+          chat: "{{flockEvent.chat}}",
+          text: $("#todoText").val() 
+        };
+        todoRequestWithData(data, function() {
+          alert("Todo cannot be created. Please try again.");
+        });
+      }
+
+      function deleteTodo(id) {
+        var data = {
+          type: "delete",
+          userId: "{{flockEvent.userId}}",
+          userName: "{{flockEvent.userName}}",
+          chat: "{{flockEvent.chat}}",
+          todoID: id
+        };
+
+        todoRequestWithData(data, function() {
+          alert("Todo cannot be deleted. Please try again.");
+        });
+      }
+
+      function todoCheckChanged(id) {
+        var todo = $("#checkTodo" + id);
+        var isChecked = todo.is(":checked");
+        var data = {
+          type: "check",
+          userId: "{{flockEvent.userId}}",
+          userName: "{{flockEvent.userName}}",
+          chat: "{{flockEvent.chat}}",
+          isDone: isChecked,
+          todoID: id
+        };
+
+        todoRequestWithData(data, function() {
+          todo.prop('checked', !isChecked);
+          alert("Todo cannot be updated. Please try again.");
+        });
+      }
+    </script>
+    <style>
+      .chatName {
+        color: #53bd53;
+        font-weight: bolder;
+        padding-left: 10px;
+        padding-right: 10px;
+        text-align: center;
+      }
+
+      hr {
+        margin-top: 0px;
+        margin-bottom: 10px;
+      }
+
+      .closeSign {
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="center chatName">With {{flockEvent.chatName}}</div> <br />
+      <div>
+        <div class="input-group">
+         <input type="text" class="form-control" id="todoText" placeholder="Create new todo!" />
+         <span class="input-group-btn">
+              <button class="btn btn-default" type="button" onclick="return createTodo();">Add</button>
+         </span>
+        </div>
+      </div>
+      <br />
+      {{#todoList}}
+        <div class="todo" id="todo{{id}}">
+        <input type="checkbox" id="checkTodo{{id}}" onchange="todoCheckChanged('{{id}}');"{{#isDone}} checked {{/isDone}} /> &nbsp;
+        {{#isDone}}
+          <strike>
+        {{/isDone}}
+        {{text}}
+        {{#isDone}}
+          </strike>
+        {{/isDone}}
+        <span class="closeSign pull-right" id="todoClose{{id}}" onclick="return deleteTodo('{{id}}')"></span>
+        <hr /></div>
+
+        <script type="text/javascript">
+          $('#todo{{id}}').hover(
+            function() {
+              $('#todoClose{{id}}').show().append('X');
+            }, function() {
+              $('#todoClose{{id}}').hide().empty();
+            }
+          );
+        </script>
+      {{/todoList}}
+    </div>
+  </body>
+</html>

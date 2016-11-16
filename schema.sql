@@ -1,0 +1,15 @@
+CREATE TABLE todos (
+  id MEDIUMINT NOT NULL AUTO_INCREMENT,
+  userId VARCHAR(25) NOT NULL,
+  chat VARCHAR(25) NOT NULL,
+  text TEXT NOT NULL,
+  createdAt TIMESTAMP NOT NULL DEFAULT current_timestamp,
+  isDone tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE tokens (
+  userId VARCHAR(25) NOT NULL,
+  token VARCHAR(50) NOT NULL,
+  PRIMARY KEY (userId)
+);

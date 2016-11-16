@@ -1,0 +1,13 @@
+{
+  "name": "tododemo",
+  "version": "1.0.0",
+  "description": "FlockOS Demo App for AWS Dev Day",
+  "main": "index.js",
+  "author": "Udit Agarwal",
+  "license": "ISC",
+  "dependencies": {
+    "flockos": "github:flockchat/flockos-node-sdk",
+    "mustache": "^2.3.0",
+    "mysql": "^2.12.0"
+  }
+}
