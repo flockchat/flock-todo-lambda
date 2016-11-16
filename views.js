@@ -1,9 +1,7 @@
 var todo = require("./model/todo.js")
 var mustache = require('mustache');
 var config = require ("./config.js");
-var flock = require('flockos');
-flock.setAppId(config.flock.appID);
-flock.setAppSecret(config.flock.appSecret);
+var flock = require('./flock.js');
 
 module.exports = function () {
     var views = {};
@@ -11,7 +9,7 @@ module.exports = function () {
     views.handleEvent = function(event, context, callback) {
 	var queryParams = event.queryStringParameters;
 	var token = queryParams.flockEventToken;
-	var payload = flock.events.verifyToken(token);
+	var payload = flock.verifyToken(token);
         if (!payload) {
             console.log('Invalid event token', token);
             this.response(403, this.htmlWithBody("Unauthorized Access"), context);
