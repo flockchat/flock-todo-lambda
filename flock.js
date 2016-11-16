@@ -1,8 +1,8 @@
 var token = require("./model/token.js");
 var config = require("./config.js");
 var flockos = require('flockos');
-flockos.setAppId(config.flock.appID);
-flockos.setAppSecret(config.flock.appSecret);
+flockos.setAppId(config.appID);
+flockos.setAppSecret(config.appSecret);
 
 module.exports = function() {
     var flock = {};
